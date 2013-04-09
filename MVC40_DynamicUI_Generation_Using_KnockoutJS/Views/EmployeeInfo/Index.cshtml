@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<script src="~/Scripts/jquery-1.9.1.min.js"></script>
+<script src="~/Scripts/knockout-2.2.1.js"></script>
+ 
+<table>
+    <thead>
+        <tr>
+            <th>
+                EmpNo
+            </th>
+              <th>
+                EmpName
+            </th>
+              <th>
+                Salary
+            </th>
+              <th>
+                DeptName
+            </th>
+              <th>
+                Designation
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody data-bind="template: { name: 'EmpRecord', foreach: Employees }">
+    </tbody>
+</table>
+
+<!---Html Template-->
+<script id="EmpRecord" type="text/html">
+    <tr>
+        <td>
+            <input type="text" style="width:100px;"  data-bind="value: $data.EmpNo"  disabled="disabled" />
+                </td>
+        <td>
+            <input type="text" style="width:100px;"  data-bind="value: $data.EmpName" />
+            </td>
+        <td>
+            <input type="text" style="width:100px;"  data-bind="value: $data.Salary" />
+       </td>
+        <td>
+            
+            <input type="text" style="width:100px;"  data-bind="value: $data.DeptName" />
+        </td>
+        <td>
+            <input type="text" style="width:100px;"  data-bind="value: $data.Designation" />
+        </td>
+    </tr>
+</script>
+<!---Html Template-->
+<script type="text/javascript">
+    function EmployeeInfoViewModel() {
+
+        var self = this;
+
+        self.Employees = ko.observableArray([]);
+
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:1452/api/EmployeeInfoAPI",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                self.Employees(data);
+            },
+            error: function (error) {
+                alert(error.status + "<--and--> " + error.statusText);
+            }
+        });
+        }
+    $(document).ready(function () {
+        ko.applyBindings(new EmployeeInfoViewModel());
+    });
+</script>
